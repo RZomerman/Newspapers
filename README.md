@@ -25,13 +25,15 @@ The launcher starts a local server, waits for readiness, and opens Edge kiosk
 mode with ambient layout enabled. Alt+F4 exits the browser; close the server
 window when finished.
 
-**Auto-update:** the Hub must be a `git clone` of
-<https://github.com/RZomerman/Newspapers> (needs Git installed). On start, and
-every 30 minutes (`-UpdateMinutes`), the launcher runs `git pull --ff-only`,
-runs `npm ci` if `package*.json` changed, restarts the server, and the open page
-reloads itself within a minute. Push to `main` to deploy. Use `-NoUpdate` to
-disable. Do not edit files on the Hub; a diverged clone will keep its current
-version and log a warning.
+**Auto-update:** no Git needed. On start and every 30 minutes
+(`-UpdateMinutes`), the launcher checks the latest commit on `main` of
+<https://github.com/RZomerman/Newspapers> (public repo, HTTPS to github.com
+required), downloads the zip, overlays the `hub` folder, runs `npm ci` if the
+lockfile changed, restarts the server, and the open page reloads itself within
+a minute. The installed commit is recorded in `hub\.version`. If Git is
+installed and the Hub is a `git clone`, it uses `git pull --ff-only` instead.
+Push to `main` to deploy. Use `-NoUpdate` to disable. Changes to
+`Start-Hub.ps1` itself take effect only after restarting the launcher.
 Only run one server per port. Use `.\Start-Hub.ps1 -Port 3001` if needed.
 Follow your organization's PowerShell execution policy; do not bypass it.
 
